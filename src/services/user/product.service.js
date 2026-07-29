@@ -174,16 +174,18 @@ const productService = {
       where: { slug },
       include: {
         products: {
-          where: { status: 'PUBLISHED' },
-          take: 20
+          where: { status: "PUBLISHED" },
+          take: 20,
         },
         children: true,
-        parent: true
-      }
+        parent: true,
+      },
     });
+
+    if (!category) return null;
+    category.image = category.image ? JSON.parse(category.image) : null;
     return category;
   },
-
   // Get all brands
   async getAllBrands() {
     const brands = await prisma.brand.findMany({
@@ -302,16 +304,16 @@ const productService = {
   },
 
   // Search products
-  async searchProducts(query, page = 1, limit = 20) {
+  async searchProducts(q, page = 1, limit = 20) {
     const skip = (page - 1) * limit;
 
     const where = {
       status: 'PUBLISHED',
       visibility: 'PUBLIC',
       OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { description: { contains: query, mode: 'insensitive' } },
-        { tags: { has: query } }
+        { name: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+        { tags: { has: q } }
       ]
     };
 
@@ -320,10 +322,6 @@ const productService = {
         where,
         skip,
         take: limit,
-        include: {
-          category: true,
-          brand: true
-        },
         orderBy: { createdAt: 'desc' }
       }),
       prisma.product.count({ where })
@@ -336,7 +334,7 @@ const productService = {
         limit,
         total,
         pages: Math.ceil(total / limit),
-        query
+        q
       }
     };
   },

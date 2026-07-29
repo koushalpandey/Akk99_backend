@@ -22,7 +22,7 @@ const productController = {
       });
     } catch (error) {
       console.error('Get all products error:', error);
-       return res.status(500).json({
+      return res.status(500).json({
         success: false,
         error: 'Internal server error'
       });
@@ -228,7 +228,7 @@ const productController = {
         });
       }
 
-      const result = await productService.searchProducts(
+      const result = await productService.product.searchProducts(
         q,
         page ? parseInt(page) : 1,
         limit ? parseInt(limit) : 20
