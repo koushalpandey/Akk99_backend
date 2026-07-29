@@ -9,6 +9,8 @@ const DashboardproductController = {
             return res.status(200).json({
                 message: "Dashbaord Product List",
                 data: {
+                    sliders: productListData.sliders,
+                    category: productListData.categoriesData,
                     electronic: productListData.electronic,
                     testing: productListData.testing
                 }
