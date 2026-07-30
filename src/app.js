@@ -12,7 +12,18 @@ dotenv.config();
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://ak99.in",
+    "https://www.ak99.in",
+    "http://localhost:5173"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
