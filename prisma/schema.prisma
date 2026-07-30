@@ -8,27 +8,51 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   name          String
-  email         String    @unique
+  email         String      @unique
   password      String?
-  googleId      String?   @unique
+  googleId      String?     @unique
   picture       String?
-  provider      String    @default("email")
-  role          String    @default("user")
-  isActive      Boolean   @default(true)
-  emailVerified Boolean   @default(false)
+  provider      String      @default("email")
+  role          String      @default("user")
+  isActive      Boolean     @default(true)
+  emailVerified Boolean     @default(false)
   lastLogin     DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  userDetail    UserDetail?
   sessions      Session[]
   reviews       Review[]
   wishlists     Wishlist[]
   orders        Order[]
   cartItems     CartItem[]
-  
+
   @@map("users")
+}
+
+model UserDetail {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @unique
+
+  phoneNumber   String?
+  address       String?
+  city          String?
+  state         String?
+  pincode       String?
+  gender        Gender?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_details")
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
 
 model Session {
@@ -40,49 +64,49 @@ model Session {
   isRevoked    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("sessions")
 }
 
 model Product {
-  id              Int       @id @default(autoincrement())
-  name            String
-  slug            String    @unique
-  description     String?
+  id               Int               @id @default(autoincrement())
+  name             String
+  slug             String            @unique
+  description      String?
   shortDescription String?
-  price           Float     @default(0)
-  comparePrice    Float?
-  costPerItem     Float?
-  sku             String?   @unique
-  barcode         String?   @unique
-  quantity        Int       @default(0)
-  trackQuantity   Boolean   @default(true)
-  weight          Float?
-  status          ProductStatus @default(DRAFT)
-  visibility      ProductVisibility @default(PUBLIC)
-  featured        Boolean   @default(false)
-  images          Json?
-  video           String?
-  tags            String[]
-  brandId         Int?
-  brand           Brand?    @relation(fields: [brandId], references: [id])
-  categoryId      Int?
-  category        Category? @relation(fields: [categoryId], references: [id])
-  seoTitle        String?
-  seoDescription  String?
-  metaKeywords    String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
-  reviews         Review[]
-  wishlists       Wishlist[]
-  cartItems       CartItem[]
-  orderItems      OrderItem[]
-  variants        ProductVariant[]
-  attributes      ProductAttribute[]
-  
+  price            Float             @default(0)
+  comparePrice     Float?
+  costPerItem      Float?
+  sku              String?           @unique
+  barcode          String?           @unique
+  quantity         Int               @default(0)
+  trackQuantity    Boolean           @default(true)
+  weight           Float?
+  status           ProductStatus     @default(DRAFT)
+  visibility       ProductVisibility @default(PUBLIC)
+  featured         Boolean           @default(false)
+  images           Json?
+  video            String?
+  tags             String[]
+  brandId          Int?
+  brand            Brand?            @relation(fields: [brandId], references: [id])
+  categoryId       Int?
+  category         Category?         @relation(fields: [categoryId], references: [id])
+  seoTitle         String?
+  seoDescription   String?
+  metaKeywords     String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  reviews    Review[]
+  wishlists  Wishlist[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+  variants   ProductVariant[]
+  attributes ProductAttribute[]
+
   @@index([slug])
   @@index([status])
   @@index([categoryId])
@@ -90,20 +114,20 @@ model Product {
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  slug        String    @unique
+  slug        String     @unique
   description String?
   image       String?
   parentId    Int?
-  parent      Category? @relation("CategoryToCategory", fields: [parentId], references: [id])
+  parent      Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
   children    Category[] @relation("CategoryToCategory")
   products    Product[]
-  level       Int       @default(0)
+  level       Int        @default(0)
   path        String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
   @@index([slug])
   @@index([parentId])
   @@map("categories")
@@ -120,59 +144,59 @@ model Brand {
   products    Product[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  
+
   @@index([slug])
   @@map("brands")
 }
 
 model ProductVariant {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   productId    Int
-  product      Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  sku          String    @unique
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku          String   @unique
   price        Float
   comparePrice Float?
-  quantity     Int       @default(0)
+  quantity     Int      @default(0)
   attributes   Json
   images       Json?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  
-  cartItems    CartItem[]
-  orderItems   OrderItem[]
-  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
   @@map("product_variants")
 }
 
 model ProductAttribute {
-  id          Int       @id @default(autoincrement())
-  name        String
-  value       String
-  productId   Int
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  id        Int      @id @default(autoincrement())
+  name      String
+  value     String
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([productId, name, value])
   @@map("product_attributes")
 }
 
 model Review {
-  id          Int       @id @default(autoincrement())
-  productId   Int
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
-  rating      Int
-  title       String?
-  comment     String?
-  images      Json?
-  isVerified  Boolean   @default(false)
-  isApproved  Boolean   @default(false)
-  helpful     Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  id         Int      @id @default(autoincrement())
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  rating     Int
+  title      String?
+  comment    String?
+  images     Json?
+  isVerified Boolean  @default(false)
+  isApproved Boolean  @default(false)
+  helpful    Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
   @@index([productId])
   @@index([userId])
   @@index([rating])
@@ -180,57 +204,57 @@ model Review {
 }
 
 model Wishlist {
-  id          Int       @id @default(autoincrement())
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId   Int
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
   @@unique([userId, productId])
   @@map("wishlists")
 }
 
 model CartItem {
-  id          Int       @id @default(autoincrement())
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId   Int
-  product     Product   @relation(fields: [productId], references: [id])
-  variantId   Int?
-  variant     ProductVariant? @relation(fields: [variantId], references: [id])
-  quantity    Int       @default(1)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  id        Int             @id @default(autoincrement())
+  userId    Int
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product         @relation(fields: [productId], references: [id])
+  variantId Int?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity  Int             @default(1)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
   @@unique([userId, productId, variantId])
   @@map("cart_items")
 }
 
 model Order {
-  id              Int          @id @default(autoincrement())
-  orderNumber     String       @unique
+  id              Int           @id @default(autoincrement())
+  orderNumber     String        @unique
   userId          Int
-  user            User         @relation(fields: [userId], references: [id])
-  status          OrderStatus  @default(PENDING)
+  user            User          @relation(fields: [userId], references: [id])
+  status          OrderStatus   @default(PENDING)
   paymentStatus   PaymentStatus @default(UNPAID)
   shippingAddress Json
   billingAddress  Json?
   subtotal        Float
-  discount        Float        @default(0)
-  tax             Float        @default(0)
-  shippingCost    Float        @default(0)
+  discount        Float         @default(0)
+  tax             Float         @default(0)
+  shippingCost    Float         @default(0)
   total           Float
   couponCode      String?
   notes           String?
   paidAt          DateTime?
   deliveredAt     DateTime?
   cancelledAt     DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  
-  items           OrderItem[]
-  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  items OrderItem[]
+
   @@index([orderNumber])
   @@index([userId])
   @@index([status])
@@ -238,45 +262,45 @@ model Order {
 }
 
 model OrderItem {
-  id          Int       @id @default(autoincrement())
-  orderId     Int
-  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId   Int
-  product     Product   @relation(fields: [productId], references: [id])
-  variantId   Int?
-  variant     ProductVariant? @relation(fields: [variantId], references: [id])
-  quantity    Int
-  price       Float
-  total       Float
-  createdAt   DateTime  @default(now())
-  
+  id        Int             @id @default(autoincrement())
+  orderId   Int
+  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product         @relation(fields: [productId], references: [id])
+  variantId Int?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity  Int
+  price     Float
+  total     Float
+  createdAt DateTime        @default(now())
+
   @@map("order_items")
 }
 
 model Setting {
-  id          Int       @id @default(autoincrement())
-  key         String    @unique
-  value       String?   @db.Text
-  type        String    @default("text")
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String?  @db.Text
+  type        String   @default("text")
   description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   @@map("settings")
 }
 
 model Slider {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String?
   subtitle    String?
   description String?
-  image       String    @db.Text
+  image       String   @db.Text
   link        String?
-  order       Int       @default(0)
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   @@map("sliders")
 }
 

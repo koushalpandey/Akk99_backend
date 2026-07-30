@@ -1,10 +1,17 @@
 import { PrismaClient } from '@prisma/client';
+import redisClient from '../../utils/redis.js';
 
 const prisma = new PrismaClient();
-
+const DASHBOARD_CACHE_KEY = "dashboard:data";
 
 const DashbaordProductService = {
     async DashbaordService() {
+        const cache = await redisClient.get(DASHBOARD_CACHE_KEY);
+        if (cache) {
+            console.log("✅ Dashboard from Redis");
+            return JSON.parse(cache);
+        }
+        console.log("📦 Dashboard from Database");
         const specificData = {
             id: true,
             name: true,
@@ -67,12 +74,19 @@ const DashbaordProductService = {
                 }),
             ]);
 
-            return {
+            const result = {
                 sliders,
                 categoriesData,
                 electronic,
                 testing,
             };
+            await redisClient.set(DASHBOARD_CACHE_KEY, JSON.stringify(result),
+                {
+                    EX: 300
+                }
+            );
+            return result;
+
         } catch (error) {
             throw error;
         }

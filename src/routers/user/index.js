@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authRoutes from "./auth.routes.js";
 import productRoutes from "./product.routes.js";
+import UserDetailRoutes from "./userDetail.routes.js";
 
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import reviewRouter from './review.routes.js'
@@ -10,7 +11,9 @@ import reviewRouter from './review.routes.js'
 const router = Router();
 router.use("/auth", authRoutes);
 router.use("/products", productRoutes);
+router.use("/profile", UserDetailRoutes);
 router.use("/review", authMiddleware, reviewRouter);
+
 
 
 export default router;
