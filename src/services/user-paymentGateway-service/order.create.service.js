@@ -30,10 +30,10 @@ const RazorpayOrderService = {
                 throw new Error("Product is not available for purchase");
             }
 
-            // Generate unique order number
+
             const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-            // Create order in database
+
             const order = await prisma.order.create({
                 data: {
                     orderNumber: orderNumber,
@@ -41,7 +41,7 @@ const RazorpayOrderService = {
                     status: "PENDING",
                     paymentStatus: "UNPAID",
                     shippingAddress: addressData,
-                    billingAddress: addressData, // Using same as shipping for simplicity
+                    billingAddress: addressData,
                     subtotal: product.price,
                     discount: 0,
                     tax: 0,
@@ -65,9 +65,9 @@ const RazorpayOrderService = {
                 }
             });
 
-            // Create Razorpay Order
+
             const razorpayOrder = await razorpay.orders.create({
-                amount: Math.round(product.price * 100), // Amount in paise
+                amount: Math.round(product.price * 100),
                 currency: "INR",
                 receipt: orderNumber,
                 notes: {
@@ -81,7 +81,7 @@ const RazorpayOrderService = {
             const updatedOrder = await prisma.order.update({
                 where: { id: order.id },
                 data: {
-                    // Store razorpay order ID (you need to add this field to schema)
+
                     razorpayOrderId: razorpayOrder.id
                 }
             });
@@ -106,7 +106,7 @@ const RazorpayOrderService = {
         try {
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = paymentData;
 
-            // Verify signature
+
             const crypto = await import('crypto');
             const body = razorpay_order_id + "|" + razorpay_payment_id;
             const expectedSignature = crypto
@@ -129,7 +129,7 @@ const RazorpayOrderService = {
                     paymentStatus: "PAID",
                     status: "CONFIRMED",
                     paidAt: new Date(),
-                    razorpayPaymentId: razorpay_payment_id // Add this field to schema
+                    razorpayPaymentId: razorpay_payment_id
                 },
                 include: {
                     items: {
@@ -140,7 +140,7 @@ const RazorpayOrderService = {
                 }
             });
 
-            // Update product quantity
+
             for (const item of order.items) {
                 await prisma.product.update({
                     where: { id: item.productId },

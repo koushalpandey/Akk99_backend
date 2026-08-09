@@ -1,5 +1,5 @@
 import { Router } from "express";
-import RazorpayController from "../../controllers/user-paymentGateway/index.js";
+import RazorpayController from "./../../controllers/user-paymentGateway/index.js";
 
 
 const router = Router()

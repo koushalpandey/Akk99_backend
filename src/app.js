@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import redisClient from './utils/redis.js';
 import userRoutes from './routers/user/index.js'
 import adminRoutes from './routers/admin/index.js'
-import PaymentRoutes from './routers/user-paymentGateway/index.js'
+
 
 dotenv.config();
 
@@ -31,7 +31,7 @@ app.use(morgan('dev'));
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/admin', adminRoutes);
-app.use('/api/v1/user-payment', PaymentRoutes);
+
 
 app.get('/', async (req, res) => {
   let redisStatus = 'disconnected';

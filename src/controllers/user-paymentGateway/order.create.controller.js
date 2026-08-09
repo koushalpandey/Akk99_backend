@@ -5,7 +5,7 @@ const RazorpayOrderController = {
         const userId = req.user.id;
         const { productId, address } = req.body;
 
-        // Validation
+
         if (!userId || !productId) {
             return res.status(400).json({
                 success: false,
@@ -20,7 +20,7 @@ const RazorpayOrderController = {
             });
         }
 
-        // Validate address fields
+
         const requiredFields = ['address', 'city', 'state', 'pincode', 'phoneNumber'];
         const missingFields = requiredFields.filter(field => !address[field]);
 
@@ -32,7 +32,7 @@ const RazorpayOrderController = {
         }
 
         try {
-            const response = await orderService.CreateOrderService(
+            const response = await orderService.Order.CreateOrderService(
                 userId,
                 productId,
                 address
