@@ -7,6 +7,7 @@ const router = Router()
 
 
 router.post('/create', RazorpayController.Order.createOrderController)
+// router.post('/verify', RazorpayController.Order.createOrderController)
 
 
 export default router

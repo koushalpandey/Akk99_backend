@@ -247,6 +247,8 @@ model Order {
   total           Float
   couponCode      String?
   notes           String?
+  razorpayOrderId String? @unique  
+  razorpayPaymentId String? @unique 
   paidAt          DateTime?
   deliveredAt     DateTime?
   cancelledAt     DateTime?
