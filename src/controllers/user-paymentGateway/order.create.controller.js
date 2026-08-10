@@ -70,7 +70,7 @@ const RazorpayOrderController = {
         }
 
         try {
-            const verificationResult = await orderService.VerifyPaymentService({
+            const verificationResult = await orderService.Order.VerifyPaymentService({
                 razorpay_order_id,
                 razorpay_payment_id,
                 razorpay_signature,
