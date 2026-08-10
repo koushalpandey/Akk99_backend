@@ -85,8 +85,6 @@ const RazorpayOrderController = {
 
         } catch (error) {
             console.error("Verification Error:", error);
-
-            // Mark order as failed if verification fails
             try {
                 await prisma.order.update({
                     where: { id: parseInt(orderId) },
