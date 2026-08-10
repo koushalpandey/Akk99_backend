@@ -17,6 +17,8 @@ app.use(cors({
   origin: [
     "https://ak99.in",
     "https://www.ak99.in",
+    "https://admin.ak99.in",
+    "https://www.admin.ak99.in",
     "http://localhost:7000",
     "http://localhost:4200",
   ],
