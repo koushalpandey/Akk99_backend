@@ -61,7 +61,6 @@ const RazorpayOrderController = {
     async verifyOrderController(req, res) {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
 
-        // Validation
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !orderId) {
             return res.status(400).json({
                 success: false,
@@ -117,9 +116,7 @@ const RazorpayOrderController = {
         }
 
         try {
-            const order = await orderService.GetOrderStatusService(orderId);
-
-            // Check if order belongs to user
+            const order = await orderService.Order.GetOrderStatusService(orderId);
             if (order.userId !== parseInt(userId)) {
                 return res.status(403).json({
                     success: false,

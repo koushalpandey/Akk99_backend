@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import razorpay from "../../config/razorpayConfig.js";
-
-
 const prisma = new PrismaClient();
 
 const RazorpayOrderService = {
@@ -32,7 +30,6 @@ const RazorpayOrderService = {
 
 
             const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
 
             const order = await prisma.order.create({
                 data: {
@@ -77,7 +74,7 @@ const RazorpayOrderService = {
                 }
             });
 
-            // Update order with razorpay order ID
+
             const updatedOrder = await prisma.order.update({
                 where: { id: order.id },
                 data: {
@@ -120,7 +117,7 @@ const RazorpayOrderService = {
                 throw new Error("Payment verification failed - Invalid signature");
             }
 
-            // Update order with payment details
+
             const order = await prisma.order.update({
                 where: {
                     id: parseInt(orderId)
