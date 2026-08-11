@@ -7,9 +7,10 @@ import dashboardService from './dashboard.service.js';
 import sliderService from './slider.service.js';
 import offerService from './offer.service.js';
 import settingService from './settings.service.js';
+import OrderListService from './order.service.js';
 
 export default {
-    auth : authService,
+    auth: authService,
     product: productService,
     brand: brandService,
     category: categoryService,
@@ -17,6 +18,7 @@ export default {
     dashboard: dashboardService,
     setting: settingService,
     offer: offerService,
-    slider: sliderService
-   
+    slider: sliderService,
+    userorder: OrderListService
+
 }

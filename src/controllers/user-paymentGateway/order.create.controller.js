@@ -137,6 +137,25 @@ const RazorpayOrderController = {
                 error: error.message
             });
         }
+    },
+
+    async getOderListController(req, res) {
+        const userId = req.user.id;
+
+        try {
+            const order = await orderService.Order.GetOrderListService(userId);
+            return res.status(200).json({
+                success: true,
+                data: order
+            });
+        } catch (error) {
+            console.error("Get Order List Error:", error.message);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to get order list",
+                error: error.message
+            });
+        }
     }
 };
 

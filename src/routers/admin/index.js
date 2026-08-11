@@ -8,6 +8,7 @@ import dashboardRoutes from "./dashboard.routes.js";
 import settingRoutes from "./settings.routes.js";
 import offersRoutes from "./offer.routes.js";
 import sliderRoutes from "./slider.routes.js";
+import OrderRoutes from "./order.routes.js";
 
 
 
@@ -21,6 +22,7 @@ router.use("/dashboard", dashboardRoutes);
 router.use("/settings", settingRoutes);
 router.use("/offers", offersRoutes);
 router.use("/sliders", sliderRoutes);
+router.use("/orders", OrderRoutes);
 
 
 

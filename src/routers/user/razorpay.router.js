@@ -5,10 +5,15 @@ import RazorpayController from "./../../controllers/user-paymentGateway/index.js
 const router = Router()
 
 
-
+// Razorpay Order Creat routes
 router.post('/create', RazorpayController.Order.createOrderController)
 router.post('/verify', RazorpayController.Order.verifyOrderController)
-router.get('/order-status', RazorpayController.Order.getOrderStatusController)
+router.get('/status', RazorpayController.Order.getOrderStatusController)
+
+
+
+// Get user Orderlist
+router.get('/list', RazorpayController.Order.getOderListController)
 
 
 export default router

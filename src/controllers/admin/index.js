@@ -7,6 +7,7 @@ import dashboardController from './dashboard.controller.js';
 import settingController from './settings.controller.js';
 import sliderController from './slider.controller.js';
 import offersController from './offer.controller.js';
+import OrderListController from './order.controller.js';
 
 
 export default {
@@ -18,6 +19,7 @@ export default {
     dashboard: dashboardController,
     setting: settingController,
     slider: sliderController,
-    offer: offersController
-   
+    offer: offersController,
+    order: OrderListController
+
 };

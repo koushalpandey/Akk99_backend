@@ -167,17 +167,22 @@ const RazorpayOrderService = {
                 include: {
                     items: {
                         include: {
-                            product: true,
-                            variant: true
+                            product: {
+                                select: {
+                                    name: true,
+                                    images: true,
+                                    sku: true,
+                                    slug: true,
+                                    price: true,
+                                    comparePrice: true,
+                                    quantity: true,
+
+                                }
+                            },
+
                         }
                     },
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            email: true
-                        }
-                    }
+
                 }
             });
 
@@ -189,6 +194,42 @@ const RazorpayOrderService = {
 
         } catch (error) {
             throw new Error(`Failed to get order status: ${error.message}`);
+        }
+    },
+
+    async GetOrderListService(userId) {
+        try {
+            const order = await prisma.order.findMany({
+                where: { userId: parseInt(userId) },
+                include: {
+                    items: {
+                        include: {
+                            product: {
+                                select: {
+                                    name: true,
+                                    images: true,
+                                    sku: true,
+                                    slug: true,
+                                    price: true,
+                                    comparePrice: true,
+                                    quantity: true,
+
+                                }
+                            },
+                        }
+                    },
+
+                }
+            });
+
+            if (!order) {
+                throw new Error("Order not found");
+            }
+
+            return order;
+
+        } catch (error) {
+            throw new Error(`Failed to get order list: ${error.message}`);
         }
     }
 };
