@@ -222,9 +222,6 @@ const RazorpayOrderService = {
                 }
             });
 
-            if (!order) {
-                throw new Error("Order not found");
-            }
 
             return order;
 
