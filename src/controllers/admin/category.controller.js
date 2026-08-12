@@ -6,7 +6,7 @@ class CategoryController {
     try {
       const file = req.file;
       const category = await categoryService.category.createCategory(req.body, file);
-      
+
       res.status(201).json({
         success: true,
         message: 'Category created successfully',
@@ -27,7 +27,7 @@ class CategoryController {
       const { id } = req.params;
       const file = req.file;
       const category = await categoryService.category.updateCategory(id, req.body, file);
-      
+
       res.status(200).json({
         success: true,
         message: 'Category updated successfully',
@@ -47,7 +47,7 @@ class CategoryController {
     try {
       const { id } = req.params;
       const result = await categoryService.category.deleteCategory(id);
-      
+
       res.status(200).json({
         success: true,
         message: result.message
@@ -66,7 +66,7 @@ class CategoryController {
     try {
       const { id } = req.params;
       const category = await categoryService.category.getCategory(id);
-      
+
       res.status(200).json({
         success: true,
         data: category
@@ -84,7 +84,7 @@ class CategoryController {
   async getCategories(req, res) {
     try {
       const categories = await categoryService.category.getCategories(req.query);
-      
+
       res.status(200).json({
         success: true,
         data: categories
@@ -102,7 +102,7 @@ class CategoryController {
   async getCategoryTree(req, res) {
     try {
       const categories = await categoryService.category.getCategoryTree();
-      
+
       res.status(200).json({
         success: true,
         data: categories
@@ -121,7 +121,7 @@ class CategoryController {
     try {
       const { slug } = req.params;
       const category = await categoryService.category.getCategoryBySlug(slug);
-      
+
       res.status(200).json({
         success: true,
         data: category
