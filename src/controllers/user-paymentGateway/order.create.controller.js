@@ -144,8 +144,15 @@ const RazorpayOrderController = {
 
         try {
             const order = await orderService.Order.GetOrderListService(userId);
+            if (!order.length) {
+                return res.status(404).json({
+                    success: false,
+                    message: "No orders found for this user",
+                });
+            }
             return res.status(200).json({
                 success: true,
+                message: "Order list fetched successfully",
                 data: order
             });
         } catch (error) {
