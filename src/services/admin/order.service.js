@@ -12,7 +12,13 @@ const OrderListService = {
                     createdAt: "desc"
                 },
                 include: {
-                    user: true
+                    user: {
+                        select: {
+                            name: true,
+                            email: true,
+
+                        }
+                    }
                 }
             });
             return order
