@@ -201,6 +201,9 @@ const RazorpayOrderService = {
         try {
             const order = await prisma.order.findMany({
                 where: { userId: parseInt(userId) },
+                orderBy: {
+                    createdAt: "desc"
+                },
                 include: {
                     items: {
                         include: {
